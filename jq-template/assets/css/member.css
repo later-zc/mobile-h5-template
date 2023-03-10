@@ -1,0 +1,43 @@
+.member {
+  background: url(../img/hp_bg.jpg) center/cover no-repeat;
+  /* opacity: 0; */
+  transition: all 1s ease-out 0s;
+}
+
+.rule {
+  position: absolute;
+  width: 581rem;
+  height: 926rem;
+  left: 85rem;
+  top: 198rem;
+  /* transform: scale(0.5, 0.5); */
+}
+
+.rule .text_area {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 80rem;
+  height: 820rem;
+  padding: 0 20rem;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.member .back_btn {
+  position: absolute;
+  width: 237rem;
+  height: 68rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  bottom: 77rem;
+}
+
+.back_btn span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28rem;
+}

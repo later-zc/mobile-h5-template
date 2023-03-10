@@ -1,0 +1,116 @@
+.homePage {
+  /* 背景图居中显示，当元素尺寸和背景图尺寸比例不一样时，保持背景图的尺寸比例使其短边拉长，长边裁剪 */
+  background: url(../img/hp_bg.jpg) center/cover no-repeat;
+  /* transition: all .6s ease-out 0s; */
+}
+
+.title {
+  position: absolute;
+  width: 652rem;
+  height: 95rem;
+  left: 52rem;
+  top: 50%;
+  /* margin-top: calc(228rem - 735rem); */
+  top: 228rem;
+  /* property name | duration | timing function | delay */
+  /* transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0s; */
+  /* transition: all 1s ease-out 0s; */
+}
+
+.sub_title {
+  position: absolute;
+  width: 449rem;
+  height: 31rem;
+  left: 156rem;
+  top: 359rem;
+  /* transition: all 1s ease-out 0s; */
+}
+
+.homePage .tip {
+  position: absolute;
+  width: 287rem;
+  height: 28rem;
+  left: 237rem;
+  top: 516rem;
+  /* transition: all 1s ease-out 0s; */
+}
+
+.dialog {
+  position: absolute;
+  width: 581rem;
+  height: 401rem;
+  left: 87rem;
+  top: 647rem;
+  /* transition: all 1s ease-out 0s; */
+}
+
+.name_input {
+  position: absolute;
+  width: 484rem;
+  height: 79rem;
+  left: 140rem;
+  top: 813rem;
+  /* transform: scaleX(0.8); */
+  /* animation-name: moveAnim;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out; */
+  /* transition: all 2s ease-out 0s; */
+}
+
+/* @keyframes moveAnim {
+  0% {
+  }
+  10% {
+    transform: scaleX(0.8);
+  }
+  20% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: scaleX(1);
+    transform: rotate(0deg);
+  }
+} */
+
+.name_input input {
+  position: absolute;
+  z-index: 3;
+  height: 79rem;
+  width: 320rem;
+  left: 130rem;
+  background: transparent;
+  border: 0;
+  border-style: none;
+  outline: none;
+  font-size: 32rem;
+  color: #80aaff;
+  /* transition: all 1s ease-out 0s; */
+}
+
+input::-webkit-input-placeholder {
+  color: #80aaff;
+  font-size: 32rem;
+  /* transition: all 1s ease-out 0s; */
+}
+
+.login_btn {
+  position: absolute;
+  width: 208rem;
+  height: 61rem;
+  left: 274rem;
+  top: 957rem;
+  /* transition: all 1s ease-out 0s; */
+}
+
+.login_btn span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

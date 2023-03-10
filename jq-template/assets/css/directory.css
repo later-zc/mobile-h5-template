@@ -1,0 +1,98 @@
+.directory {
+  background: url(../img/dir_bg.jpg) center / cover no-repeat;
+  /* opacity: 0; */
+  /* transition: all 1s ease-out 0s; */
+}
+.directory .tip {
+  position: fixed;
+  bottom: 80rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 24rem;
+  animation: dir_tip 1.6s 0s linear infinite;
+}
+.directory .score_btn {
+  position: absolute;
+  left: 75rem;
+  top: 627rem;
+  width: 110rem;
+  height: 162rem;
+  animation: scale 1.6s 0s linear infinite;
+}
+.directory .seat_btn {
+  position: absolute;
+  left: 82rem;
+  top: 905rem;
+  width: 110rem;
+  height: 162rem;
+  animation: scale 1.6s 0.1s linear infinite;
+}
+.directory .member_btn {
+  position: absolute;
+  left: 321rem;
+  top: 1054rem;
+  width: 110rem;
+  height: 162rem;
+  animation: scale 1.6s 0.3s linear infinite;
+}
+.directory .live_btn {
+  position: absolute;
+  left: 559rem;
+  top: 904rem;
+  width: 110rem;
+  height: 162rem;
+  animation: scale 1.6s 0.4s linear infinite;
+}
+.directory .rule_btn {
+  position: absolute;
+  left: 559rem;
+  top: 628rem;
+  width: 110rem;
+  height: 162rem;
+  animation: scale 1.6s 0.5s linear infinite;
+}
+.directory .agenda_btn {
+  position: absolute;
+  left: 321rem;
+  top: 472rem;
+  width: 110rem;
+  height: 162rem;
+  animation: scale 1.6s 0.2s linear infinite;
+}
+.directory .img1 {
+  position: absolute;
+  width: 550rem;
+  height: 331rem;
+  left: 104rem;
+  top: 700rem;
+  animation: move1 2s 0s linear infinite;
+}
+.directory .img2 {
+  position: absolute;
+  width: 150rem;
+  height: 149rem;
+  left: 304rem;
+  top: 673rem;
+  animation: move2 2s 0s linear infinite reverse;
+}
+@keyframes dir_tip {
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes scale {
+  50% {
+    transform: translateY(10rem) scale(0.9);
+  }
+}
+@keyframes move1 {
+  50% {
+    transform: translateY(10rem) scale(0.96);
+  }
+}
+@keyframes move2 {
+  50% {
+    transform: translateY(-20rem) scale(0.96);
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "maxImageWidth": 2014,
+    "maxImageHeight": 2014,
+    "defaultResPath": "",
+    "packGroups": {
+        "preload": true,
+        "beforePreload": true
+    }
+}

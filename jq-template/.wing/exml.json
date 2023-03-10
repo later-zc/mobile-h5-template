@@ -1,0 +1,37 @@
+{
+    "global": {
+        "gridColor": 8421504,
+        "gridEnabled": false,
+        "gridSize": 20,
+        "globalBindingDataTestObj": [],
+        "globalAutoLayerMarkEnable": true,
+        "globalRulerEnable": true,
+        "globalAdsorbEnable": true
+    },
+    "1576c2a3140": {
+        "guideLinesEnabled": true,
+        "bindingDataTestObj": []
+    },
+    "17b4cd30ad2": {
+        "guideLines": [
+            {
+                "type": "h",
+                "pos": 298.667
+            }
+        ]
+    },
+    "17b67ab4ca5": {
+        "guideLines": [
+            {
+                "type": "v",
+                "pos": 114.667
+            }
+        ],
+        "guideLinesEnabled": false
+    },
+    "17c36f79d86": {
+        "path": "scene.ts",
+        "class": "scene",
+        "parentPath": ""
+    }
+}

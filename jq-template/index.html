@@ -1,166 +1,36 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="./assets/css/main.css">
-  <script src="./assets/js/rem.js"></script>
-  <script src="./assets/js/jquery.min.js"></script>
-  <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
-  <script src="./assets/js/CSSPlugin.js"></script>
-  <link href="https://cdn.bootcss.com/jquery-toast-plugin/1.3.2/jquery.toast.css" rel="stylesheet">
-  <script src="https://cdn.bootcss.com/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+  <script src="./js/common/rem.js"></script>
+  <link rel="stylesheet" href="./css/index.css">
 </head>
-
 <body>
   <div class="wrapper">
-    <div class="logo_01">
-      <img src="./assets/img/logo_01.png" alt="">
-    </div>
-    <div class="logo_02">
-      <img src="./assets/img/logo_02.png" alt="">
+    <!-- 加载页 -->
+    <div class="page-load page">
+      <div class="loading center"></div>
+      <span class="center">100%</span>
     </div>
     <!-- 首页 -->
-    <div class="homePage page">
-      <div class="title">
-        <img src="./assets/img/hp_img2.png" alt="">
-      </div>
-      <div class="sub_title">
-        <img src="./assets/img/hp_img4.png" alt="">
-      </div>
-      <div class="tip">
-        <img src="./assets/img/hp_img3.png" alt="">
-      </div>
-      <div class="dialog">
-        <img src="./assets/img/hp_img6.png" alt="">
-      </div>
-      <div class="name_input">
-        <img src="./assets/img/hp_img1.png" alt="">
-        <input type="text" placeholder="请输入姓名">
-      </div>
-      <div class="login_btn">
-        <img src="./assets/img/hp_img5.png" alt="">
-        <span>登录</span>
-      </div>
-    </div>
-
-    <!-- 目录页 -->
-    <div class="directory page">
-      <div class="title">
-        <img src="./assets/img/hp_img2.png" alt="">
-      </div>
-      <div class="sub_title">
-        <img src="./assets/img/hp_img4.png" alt="">
-      </div>
-      <div class="tip">
-        <span>点击图片查看详情</span>
-      </div>
-      <div class="img1">
-        <img src="./assets/img/dir_img8.png" alt="">
-      </div>
-      <div class="img2">
-        <img src="./assets/img/dir_img7.png" alt="">
-      </div>
-      <div class="score_btn">
-        <img src="./assets/img/dir_img1.png" alt="">
-      </div>
-      <div class="seat_btn">
-        <img src="./assets/img/dir_img2.png" alt="">
-      </div>
-      <div class="member_btn">
-        <img src="./assets/img/dir_img3.png" alt="">
-      </div>
-      <div class="live_btn">
-        <img src="./assets/img/dir_img4.png" alt="">
-      </div>
-      <div class="rule_btn">
-        <img src="./assets/img/dir_img5.png" alt="">
-      </div>
-      <div class="agenda_btn">
-        <img src="./assets/img/dir_img6.png" alt="">
-      </div>
-    </div>
-
-    <!-- 会员信息 -->
-    <div class="member page">
-      <div class="rule">
-        <img src="./assets/img/member_img1.png" alt="">
-        <div class="text_area">
-          <span>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            <br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            <br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-            213333333<br>
-          </span>
-        </div>
-      </div>
-      <div class="back_btn">
-        <img src="./assets/img/hp_img5.png" alt="">
-        <span>返回首页</span>
-      </div>
-    </div>
-
-    <!-- 打分系统 -->
-    <div class="score page">
-      <div class="img1">
-        <img src="./assets/img/score_img2.png" alt="">
-        <ul class="list">
-          <!-- <li>
-            <span class="rank">1</span>
-            <div class="headImg">
-              <img src="./assets/img/score_img1.png" alt="">
-            </div>
-            <span class="name">aaaa</span>
-            <div class="vote_btn">
-              <img src="./assets/img/score_btn1.png" alt="">
-            </div>
-          </li> -->
-        </ul>
-      </div>
-      <div class="back_btn">
-        <img src="./assets/img/hp_img5.png" alt="">
-        <span>返回首页</span>
-      </div>
+    <div class="page-hp page db">
+      <img class="logo" src="./assets/img/logo.png" _src="./assets/img/logo.png" alt="">
+      <img class="float1" src="./assets/img/float1.png" _src="./assets/img/float1.png" alt="">
+      <img class="float2" src="./assets/img/float2.png" _src="./assets/img/float2.png" alt="">
+      <img class="t1" src="./assets/img/t1.png" _src="./assets/img/t1.png" alt="">
+      <img class="t2" src="./assets/img/t2.png" _src="./assets/img/t2.png" alt="">
+      <img class="t3" src="./assets/img/t3.png" _src="./assets/img/t3.png" alt="">
     </div>
   </div>
 
-  <script src="./assets/js/util.js"></script>
-  <script src="./assets/js/main.js"></script>
+  <script>
+
+
+
+  </script>
 
 </body>
-
 </html>

@@ -1,0 +1,7 @@
+{
+  // Configuration options for Easy LESS extension.
+  "less.compile": {
+    // 删除多余的空白来压缩css
+    "compress": true
+  }
+}

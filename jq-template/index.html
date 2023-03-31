@@ -4,33 +4,123 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>jq-template</title>
   <script src="./js/common/rem.js"></script>
   <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
   <div class="wrapper">
     <!-- 加载页 -->
-    <div class="page-load page">
-      <div class="loading center"></div>
-      <span class="center">100%</span>
+    <div id="page-load" class="page">
+      <div class="box">
+        <div class="container">
+          <div class="loading ct"></div>
+          <span class="loadNum ct">0%</span>
+        </div>
+      </div>
     </div>
     <!-- 首页 -->
-    <div class="page-hp page db">
-      <img class="logo" src="./assets/img/logo.png" _src="./assets/img/logo.png" alt="">
-      <img class="float1" src="./assets/img/float1.png" _src="./assets/img/float1.png" alt="">
-      <img class="float2" src="./assets/img/float2.png" _src="./assets/img/float2.png" alt="">
-      <img class="t1" src="./assets/img/t1.png" _src="./assets/img/t1.png" alt="">
-      <img class="t2" src="./assets/img/t2.png" _src="./assets/img/t2.png" alt="">
-      <img class="t3" src="./assets/img/t3.png" _src="./assets/img/t3.png" alt="">
+    <div id="page-hp" class="page">
+      <div class="box">
+        <div class="container">
+          <img class="logo" _src="./assets/img/logo.png" alt="">
+          <img class="float1" _src="./assets/img/float1.png" alt="">
+          <img class="float2" _src="./assets/img/float2.png" alt="">
+          <img class="float3" _src="./assets/img/float3.png" alt="">
+          <img class="float4" _src="./assets/img/float4.png" alt="">
+          <img class="t1" _src="./assets/img/t1.png" alt="">
+          <img class="t2" _src="./assets/img/t2.png" alt="">
+          <img class="t3" _src="./assets/img/t3.png" alt="">
+          <img class="i2" _src="./assets/img/i2.png" alt="">
+          <img class="i3" _src="./assets/img/i3.png" alt="">
+          <img class="i4" _src="./assets/img/i4.png" alt="">
+          <img class="i5" _src="./assets/img/i5.png" alt="">
+          <img class="start" _src="./assets/img/start.png" alt="">
+          <div class="rule-btn">
+            <img _src="./assets/img/sl.png" alt="">
+          </div>
+          <div class="redPackage-btn">
+            <img _src="./assets/img/mc.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rule">
+      <img _src="./assets/img/close.png" alt="">
     </div>
   </div>
 
   <script>
+    var _g = _g || {
+      cdn: '',
+      env: 0 // 0测试环境，1正式环境
+    }
+    ;(function() {
+      var scriptList = [
+        './js/common/jquery.min.js',
+        './js/main.js',
+        './js/common/request.js'
+      ]
+      if (_g.env == 0) {
+        scriptList.push('./js/dev/jquery.mockjax.min.js')
+        scriptList.push('./js/dev/api.js')
+      } else {
+        scriptList.push('//res.wx.qq.com/open/js/jweixin-1.6.0.js')
+        scriptList.push('./js/prod/wx.js')
+      }
+      loadScript(scriptList, preload, _g.cdn)
 
+      function loadScript(list, cb, cdn) {
+        var loaded = 0
+        function loadNext() {
+          loadSingleScript(list[loaded], () => {
+            loaded++
+            if (loaded >= list.length) {
+              console.log('js脚本全部加载完成, 开始预加载图片资源')
+              cb()
+            } else {
+              console.log('继续加载下一个脚本...')
+              loadNext()
+            }
+          }, cdn)
+        }
+        loadNext()
+      }
 
+      function loadSingleScript(src, cb, cdn) {
+        var s = document.createElement('script')
+        s.async = false
+        s.src = src.indexOf('//') == -1 ? cdn + src : src
+        s.addEventListener('load', ()=>{
+          console.log(`${src}加载完成`)
+          s.parentNode.removeChild(s)
+          s.removeEventListener('load', arguments.callee)
+          cb()
+        })
+        document.body.appendChild(s)
+      }
 
+      function preload() {
+        console.warn('开始预加载')
+        var imgLoader0 = new _g.ImgLoader()
+        imgLoader0.loadType = ['_src0']
+        imgLoader0.onComplete = main
+        imgLoader0.load()
+      }
+
+      function main() {
+        var imgLoader = new _g.ImgLoader()
+        imgLoader.loadType = ['_src']
+        // imgLoader.crossOrigin = 'anonymous'
+        imgLoader.basePath = _g.cdn
+        var oNum = $('.loadNum')[0]
+        imgLoader.onProgress = function(num) {
+          oNum.textContent = `${num}%`
+        }
+        imgLoader.onComplete = _g.main
+        imgLoader.load()
+      }
+    })()
   </script>
-
 </body>
 </html>

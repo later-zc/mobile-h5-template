@@ -1,234 +1,260 @@
-;$(() => {
-  localStorage.clear()
-  createjs.CSSPlugin.install()
+var _g = _g || {}
+// xx.event = 'ontouchstart' in window
+//   ? {start: 'touchstart', move: 'touchmove', end: 'touchend'}
+//   : {start: 'click', move: 'mousemove', end: 'mouseup'}
+var _m = _m || {}
 
-  if (!localStorage.getItem('username')) {
-    show('.homePage')
-    homePageInit()
-  } else {
-    show('.directory')
-    directoryPageInit()
+;(function($) {
+  var defaults = {
+    moveIn: 'moveIn',
+    moveOut: 'moveOut',
+    pOn: 'page-on',
+    fadeIn: 'fadeIn',
+    fadeOut: 'fadeOut',
+    cb: null
   }
-
-})
-
-const backOut = createjs.Ease.backOut
-const linear = createjs.Ease.linear
-
-// 登录页init
-function homePageInit() {
-  const homePageEl = dq('.homePage')
-  const titleEl = dq('.title', homePageEl)
-  const subTitleEl = dq('.sub_title', homePageEl)
-  const tipEl = dq('.tip', homePageEl)
-  const dialogEl = dq('.dialog', homePageEl)
-  const nameInputEl = dq('.name_input', homePageEl)
-  // const loginBtnEl = dq('.login_btn', homePageEl)
-  const loginBtnEl = $('.homePage .login_btn').get(0)
-
-  initAttr([
-    {el: titleEl, transform: 'scale(.5, .5)', opacity: '0'},
-    {el: subTitleEl, transform: 'scale(.5, .5)', opacity: '0'},
-    {el: tipEl, transform: 'scale(.5, .5)', opacity: '0'},
-    {el: dialogEl, transform: 'scale(.5, .5)', opacity: '0'},
-    {el: nameInputEl, transform: 'scale(.5, .5)', opacity: '0'},
-    {el: loginBtnEl, transform: 'scale(.5, .5)', opacity: '0'},
-  ])
-
-  createjs.Tween.get(titleEl)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  createjs.Tween.get(subTitleEl)
-    .wait(200)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  createjs.Tween.get(tipEl)
-    .wait(300)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-    .call(() => {
-      createjs.Tween.get(tipEl, {loop: true})
-        .to({opacity: ".8", transform: "scale(.85, .85)"}, 1000)
-        .to({opacity: "1", transform: "scale(1, 1)"}, 1000)
+  $.fn.moveIn = function(opts) {
+    opts = $.extend({}, defaults, opts)
+    this.addClass(opts.moveIn).show()
+    this.one('webkitAnimationEnd', () => {
+      this.removeClass(opts.moveIn).addClass(opts.pOn)
+      opts.cb&&opts.cb()
     })
-  createjs.Tween.get(dialogEl)
-    .wait(300)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  createjs.Tween.get(nameInputEl)
-    .wait(300)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  createjs.Tween.get(loginBtnEl)
-    .wait(300)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-    .call(() => {
-      $('.login_btn').on('click', function () {
-        createjs.Tween.get(loginBtnEl)
-        .to({ transform: 'scale(.8)' }, 120, linear)
-        .to({ transform: 'scale(1)' }, 120, linear)
-        .call(() => {
-          const inputVal = $('.name_input input').val()
-          if (inputVal == '') {
-            toast('请输入用户名')
-            createjs.Tween.get(nameInputEl)
-              .to({ transform: 'rotate(6deg)' }, 80)
-              .to({ transform: 'rotate(-6deg)' }, 160)
-              .to({ transform: 'rotate(6deg)' }, 160)
-              .to({ transform: 'rotate(-6deg)' }, 160)
-              .to({ transform: 'rotate(0deg)' }, 80)
-            return
+    return this
+  }
+  $.fn.moveOut = function(opts) {
+    opts = $.extend({}, defaults, opts)
+    this.addClass(opts.moveOut).show()
+    this.one('webkitAnimationEnd', () => {
+      this.removeClass(`${opts.moveOut} ${opts.pOn}`).hide()
+      opts.cb&&opts.cb()
+    })
+    return this
+  }
+  $.fn.fadeOut = function(opts) {
+    opts = $.extend({}, defaults, opts)
+    this.addClass(opts.fadeOut).show()
+    this.one('webkitAnimationEnd', () => {
+      this.removeClass(`${opts.fadeOut} ${opts.pOn}`).hide()
+      opts.cb && opts.cb()
+    })
+    return this
+  }
+  $.fn.fadeIn = function(opts) {
+    opts = $.extend({}, defaults, opts)
+    this.addClass(opts.fadeIn).show()
+    this.one('webkitAnimationEnd', () => {
+      this.removeClass(`${opts.fadeIn} ${opts.pOn}`).hide()
+      opts.cb && opts.cb()
+    })
+    return this
+  }
+})(jQuery)
+
+_m.hint = function(t) {
+  if (_m.hint.lastT == t) return
+  _m.hint.lastT = t
+  var maskEl = $(`<div class='mask'><div class='hint'>${t}</div></div>`)
+  maskEl.appendTo('body')
+  maskEl.moveIn({
+    cb() {
+      setTimeout(() => {
+        maskEl.fadeOut({
+          cb() {
+            maskEl.remove()
           }
-  
-          if (inputVal == '张三' || inputVal == '李四' || inputVal == '王五') {
-            localStorage.setItem('username', inputVal)
-            show('.directory')
-            hide('.homePage')
-            directoryPageInit()
-            return
-          }
-          toast('您输入的用户名有误')
         })
-      })
-    })
-}
-
-// 目录页init
-function directoryPageInit() {
-  const scoreBtnEl = dq('.score_btn')
-  const memberBtnEl = dq('.member_btn')
-
-  $('.score_btn').on('click', () => {
-    initAttr({el: scoreBtnEl, transform: 'scale(1, 1)'})
-    createjs.Tween.get(scoreBtnEl)
-      .to({ transform: 'scale(.85, .85)' }, 120, linear)
-      .to({ transform: 'scale(1, 1)' }, 120, linear)
-      .call(() => {
-        show('.score')
-        hide('.directory')
-        scorePageInit()
-      })
-  })
-  $('.member_btn').on('click', () => {
-    initAttr({el: memberBtnEl, transform: 'scale(1, 1)'})
-    createjs.Tween.get(memberBtnEl)
-      .to({ transform: 'scale(.85, .85)' }, 120, linear)
-      .to({ transform: 'scale(1, 1)' }, 120, linear)
-      .call(() => {
-        show('.member')
-        hide('.directory')
-        memberPageInit()
-      })
-  })
-}
-
-// 打分页init
-function scorePageInit() {
-  addData(getData())
-  const img1El = dq('.score .img1')
-  const backBtn = dq('.score .back_btn')
-  initAttr([
-    {el: backBtn, transform: 'scale(0.5, 0.5)', opacity: '0'},
-    {el: img1El, transform: 'scale(0.5, 0.5)', opacity: '0'},
-  ])
-
-  createjs.Tween.get(img1El)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  createjs.Tween.get(backBtn)
-    .wait(300)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  $('.back_btn').on('click', () => {
-    createjs.Tween.get(backBtn)
-      .to({ transform: 'scale(.85, .85)' }, 120, linear)
-      .to({ transform: 'scale(1, 1)' }, 120, linear)
-      .call(() => {
-        show('.directory')
-        const ulEl = dq('.list')
-        ulEl.innerHTML = null
-        hide('.score')
-      })
-  })
-}
-
-// 会员页init
-function memberPageInit() {
-  const ruleEl = dq('.member .rule')
-  const backBtn = dq('.member .back_btn')
-  initAttr([
-    {el: backBtn, transform: 'scale(0.5, 0.5)', opacity: '0'},
-    {el: ruleEl, transform: 'scale(0.5, 0.5)', opacity: '0'},
-  ])
-  createjs.Tween.get(ruleEl)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  createjs.Tween.get(backBtn)
-    .wait(300)
-    .to({ transform: 'scale(1, 1)', opacity: '1' }, 600, backOut)
-  $('.back_btn').on('click', () => {
-    createjs.Tween.get(backBtn)
-      .to({ transform: 'scale(.85, .85)' }, 120, linear)
-      .to({ transform: 'scale(1, 1)' }, 120, linear)
-      .call(() => {
-        $('.directory').css('display', 'block')
-        hide('.member')
-      })
-  })
-}
-
-function getData() {
-  if (!localStorage.getItem('dataList')) {
-    var dataList = [
-      { rank: 1, name: 'a', isVote: 1 },
-      { rank: 2, name: 'b', isVote: 1 },
-      { rank: 3, name: 'c', isVote: 1 },
-      { rank: 4, name: 'd', isVote: 1 },
-      { rank: 5, name: 'e', isVote: 1 },
-      { rank: 6, name: 'f', isVote: 1 },
-      { rank: 7, name: 'g', isVote: 1 },
-      { rank: 8, name: 'h', isVote: 1 },
-      { rank: 9, name: 'i', isVote: 1 },
-      { rank: 10, name: 'j', isVote: 1 },
-    ]
-    localStorage.setItem('dataList', JSON.stringify(dataList))
-  }
-  return JSON.parse(localStorage.getItem('dataList'))
-}
-
-function addData(data) {
-  var $html="";
-  data.forEach((item, index) => {
-    $html+= `
-      <li>
-        <span class="rank">${item.rank}</span>
-        <div class="headImg">
-          <img src="./assets/img/score_img1.png" alt="">
-        </div>
-        <span class="name">${item.name}</span>
-        <div class="vote_btn">
-          <img src="./assets/img/score_btn${item.isVote}.png" alt="">
-        </div>
-      </li>
-    `
-  })
-  $(".list").html($html);
-}
-
-// $(".vote_btn img")
-
-function voteHandle() {
-  if (item.isVote == 2) {
-    toast('您已投票过')
-  } else {
-    item.isVote = 2
-    imgEl_02.src = `./assets/img/score_btn${item.isVote}.png`
-    localStorage.setItem('dataList', JSON.stringify(data))
-    let voteCount = JSON.parse(localStorage.getItem('voteCount'))
-    if (voteCount == 3) {
-      toast('每人只能投三票')
-      return
-    } 
-
-    if (!voteCount) {
-      voteCount = 1
-    } else {
-      voteCount++
+        _m.hint.lastT = null
+      }, 2000)
     }
-    localStorage.setItem('voteCount', JSON.stringify(voteCount))
-    toast('投票成功')
+  })
+}
+
+_g.page = {
+  now: null,
+  last: null,
+  _z: 2, // 页面层级z-index
+  _timer: null,
+  _defaults: {
+    isMove: false,
+    pMoveIn: 'page-move-in',
+    classMoveOut: '',
+    pOn: 'page-on',
+    cb: null
+  },
+  err(e) {
+    try {
+      throw new Error(e)
+    } catch(err) {
+      console.log(err.stack)
+    }
+  },
+  to(pid, opts = {}) {
+    var that = this
+    opts = $.extend({}, this._defaults, opts)
+    console.log('pid: ', pid)
+    if (pid == this.now) return this.err('跳转失败, 跳转的是当前页面')
+    this.last = this.now
+    this.now = pid
+    this._z++
+    var $nowPage = $(this.now)
+    var $lastPage = this.last&&$(this.last) || null
+    console.log('$lastPage: ', $lastPage)
+    $nowPage.css('z-index', this._z)
+    // 初始化
+    this.reset($nowPage)
+    clearTimeout(this._timer)
+
+    if (opts.isMove) {
+      $nowPage.addClass(opts.pMoveIn).show()
+      $nowPage.one('webkitAnimationEnd', () => {
+        $nowPage.addClass(opts.pOn)
+        $nowPage.removeClass(opts.pMoveIn)
+        $lastPage&&this.reset($lastPage)
+        opts.cb&&opts.cb()
+      })
+    } else {
+      $nowPage.show()
+      this._timer = setTimeout(() => {
+        $nowPage.addClass(opts.pOn)
+        $lastPage&&this.reset($lastPage)
+        opts.cb&&opts.cb()
+      }, 6)
+    }
+
+    $lastPage&&opts.classMoveOut&&$lastPage.addClass(opts.classMoveOut)
+  },
+  reset($page) {
+    // 重置并添加页面最初的class，data-page-class="page class1 class2"
+    var oPage = $page[0]
+    var init = 'page'
+    if (oPage && oPage.dataset.pageClass) {
+      init = oPage.dataset.pageClass
+    }
+    $page.hide().removeClass().addClass(init)
+    $page.off('webkitAnimationEnd')
   }
 }
 
+;(function() {
+  /**
+   * @constructor Imgloader 图片加载类
+   * @property {string} basePath 基础路径
+   * @property {string} crossOrigin 源
+   * @property {Array<string>} loadType 自定义加载类型
+   * @property {number} time 单张图片最大加载时间
+   * @property {function} onProgress 加载进度
+   * @property {function} onComplete 加载完成
+   */
+  function ImgLoader() {
+    this.basePath = ''
+    this.crossOrigin = ''
+    this.loadType = ['_src']
+    this.time = 5000
+    this.onProgress = function(){}
+    this.onComplete = function(){}
+  }
+  ImgLoader.prototype.load = function() {
+    var loadItem = this._createQueue(this.loadType)
+    console.warn('loadItem: ', loadItem)
+    var 
+      total = loadItem.length,
+      loaded = 0,
+      isOverTime = false,
+      timer
+    if (total == 0) {
+      this.onComplete()
+    } else {
+      timer = setTimeout(() => {
+        isOverTime = true
+        this.onComplete()
+      }, this.time * total)
+      for (var i = 0; i < total; i++) {
+        this._loadOnce(loadItem[i], loading)
+      }
+    }
+    function loading() {
+      loaded++
+      var num = Math.floor((loaded / total) * 100)
+      this.onProgress(num)
+      if (num == 100 && !isOverTime) {
+        clearTimeout(timer)
+        this.onComplete()
+      }
+    }
+  }
+  ImgLoader.prototype._createQueue = function(loadType) {
+    var loadItem = []
+    for (var i = 0; i < loadType.length; i++) {
+      var type = loadType[i]
+      if (/.jpg|.png|.gif/i.test(type)) {
+        var img = new Image()
+        img.crossOrigin = this.crossOrigin || null
+        loadItem.push({
+          tag: img,
+          src: this.basePath + type
+        })
+      } else {
+        var $img = $(`img[${type}]`)
+        $img.each((i, el) => {
+          el.crossOrigin = this.crossOrigin || null
+          loadItem.push({
+            tag: el,
+            src: this.basePath + $(el).attr(type)
+          })
+        })
+      }
+    }
+    return loadItem
+  }
+  ImgLoader.prototype._loadOnce = function({tag, src}, cb) {
+    tag.src = src
+    if (tag.complete) return cb.call(this)
+    tag.onload = () => {
+      tag.onload = null
+      cb.call(this)
+    }
+    tag.onerror = () => {
+      tag.onerror = null
+      cb.call(this)
+    }
+  }
+  _g.ImgLoader = ImgLoader
+})()
+
+
+_m.init = function() {
+  init().then(res => {
+    console.warn('res: ', res)
+    if (res.status == 1) {
+      _m.initData = res
+      $('#page-load').fadeOut()
+      _m.hint('hello world')
+      _g.page.to('#page-hp', {
+        cb() {
+          $('.start').one('webkitTransitionEnd', ()=> {
+            console.log('start动画执行完成')
+
+            $('.start').addClass('start_ani')
+          })  
+        }
+      })
+    } else if (res.status == -5) {
+      _m.hint('活动已结束，感谢您的关注!')
+    }
+  })
+}
+
+_g.main = function() {
+  console.log('加载完毕---------')
+  console.log('进入页面---------')
+  // var imgLoader2 = new xx.ImgLoader()
+  // imgLoader2.basePath = xx.cdn
+  // imgLoader2.loadType = ['_src2']
+  // imgLoader2.load()
+
+  _m.init()
+  $('.rule-btn').on('click', () => {
+    console.log('first')
+  })
+}

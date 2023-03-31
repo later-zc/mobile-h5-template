@@ -1,7 +1,13 @@
+// settings.json must exist in the .vscode directory at the root level of your project
 {
   // Configuration options for Easy LESS extension.
   "less.compile": {
     // 删除多余的空白来压缩css
     "compress": true
-  }
+  },
+  // liveServer.settings.fullReload：Live Server默认会在不完全重新加载浏览器的情况下注入CSS更改
+  // 您可以通过将此设置设为true来更改此行为，默认：false
+  // https://github.com/ritwickdey/vscode-live-server/blob/HEAD/docs/settings.md
+  "liveServer.settings.fullReload": true,
+  "liveServer.settings.port": 5503
 }

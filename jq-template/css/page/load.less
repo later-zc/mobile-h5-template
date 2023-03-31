@@ -1,17 +1,30 @@
-.page-load {
+#page-load {
   // width: 100%;
   // height: 100%;
   // background: #d1453f;
   // background: url(../../assets/img/bg.jpg?load) center/cover no-repeat;
+  background: url(../../assets/img/bg.jpg) center/cover no-repeat;
+  display: block;
+  z-index: 3000;
 
   .loading {
     width: 180rem;
     height: 180rem;
     background: url(../../assets/img/loading.png) center/contain no-repeat;
+    animation: rotate 2s linear infinite;
   }
 
-  span {
+  .loadNum {
     color: #fff;
     font-size: 28rem;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }

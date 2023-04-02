@@ -1,51 +1,119 @@
 var _g = _g || {}
-// xx.event = 'ontouchstart' in window
-//   ? {start: 'touchstart', move: 'touchmove', end: 'touchend'}
-//   : {start: 'click', move: 'mousemove', end: 'mouseup'}
+_g.event = 'ontouchstart' in window
+  ? {start: 'touchstart', move: 'touchmove', end: 'touchend'}
+  : {start: 'mousedown', move: 'mousemove', end: 'mouseup'}
 var _m = _m || {}
 
 ;(function($) {
-  var defaults = {
-    moveIn: 'moveIn',
-    moveOut: 'moveOut',
-    pOn: 'page-on',
-    fadeIn: 'fadeIn',
-    fadeOut: 'fadeOut',
-    cb: null
-  }
-  $.fn.moveIn = function(opts) {
-    opts = $.extend({}, defaults, opts)
-    this.addClass(opts.moveIn).show()
-    this.one('webkitAnimationEnd', () => {
-      this.removeClass(opts.moveIn).addClass(opts.pOn)
-      opts.cb&&opts.cb()
+  // var defaults = {
+  //   moveIn: 'moveIn',
+  //   moveOut: 'moveOut',
+  //   pOn: 'page-on',
+  //   fadeIn: 'fadeIn',
+  //   fadeOut: 'fadeOut',
+  //   cb: null
+  // }
+  var classList = ['moveIn', 'moveOut', 'fadeIn', 'fadeOut', 'bounce']
+  classList.forEach(i => {
+    $.fn[i] = function(cb) {
+      var isIn = /In|bounce/g.test(i)
+      isIn 
+        ? this.addClass(i).show()
+        : this.addClass(i)
+      this.one('webkitAnimationEnd', () => {
+        isIn 
+          ? this.removeClass(i)
+          : this.removeClass(i).hide()
+        cb&&cb()
+      })
+      return this
+    }
+  })
+  $.fn.open = function(cb) {
+    return this.fadeIn(() => {
+      this.addClass('page-on')
+      cb&&cb()
     })
-    return this
   }
-  $.fn.moveOut = function(opts) {
-    opts = $.extend({}, defaults, opts)
-    this.addClass(opts.moveOut).show()
-    this.one('webkitAnimationEnd', () => {
-      this.removeClass(`${opts.moveOut} ${opts.pOn}`).hide()
-      opts.cb&&opts.cb()
+  $.fn.close = function(cb) {
+    return this.fadeOut(() => {
+      this.removeClass('page-on')
+      cb&&cb()
     })
-    return this
   }
-  $.fn.fadeOut = function(opts) {
-    opts = $.extend({}, defaults, opts)
-    this.addClass(opts.fadeOut).show()
-    this.one('webkitAnimationEnd', () => {
-      this.removeClass(`${opts.fadeOut} ${opts.pOn}`).hide()
-      opts.cb && opts.cb()
+  // $.fn.moveIn = function(opts) {
+  //   opts = $.extend({}, defaults, opts)
+  //   this.addClass(opts.moveIn).show()
+  //   this.one('webkitAnimationEnd', () => {
+  //     this.removeClass(opts.moveIn).addClass(opts.pOn)
+  //     opts.cb&&opts.cb()
+  //   })
+  //   return this
+  // }
+  // $.fn.moveOut = function(opts) {
+  //   opts = $.extend({}, defaults, opts)
+  //   this.addClass(opts.moveOut).show()
+  //   this.one('webkitAnimationEnd', () => {
+  //     this.removeClass(`${opts.moveOut} ${opts.pOn}`).hide()
+  //     opts.cb&&opts.cb()
+  //   })
+  //   return this
+  // }
+  // $.fn.fadeOut = function(opts) {
+  //   opts = $.extend({}, defaults, opts)
+  //   this.addClass(opts.fadeOut).show()
+  //   this.one('webkitAnimationEnd', () => {
+  //     this.removeClass(`${opts.fadeOut} ${opts.pOn}`).hide()
+  //     opts.cb && opts.cb()
+  //   })
+  //   return this
+  // }
+  // $.fn.fadeIn = function(opts) {
+  //   opts = $.extend({}, defaults, opts)
+  //   this.addClass(opts.fadeIn).show()
+  //   this.one('webkitAnimationEnd', () => {
+  //     this.removeClass(`${opts.fadeIn} ${opts.pOn}`).hide()
+  //     opts.cb && opts.cb()
+  //   })
+  //   return this
+  // }
+  $.fn.tapstart = function(cb) {
+    return this.on(_g.event.start, e => {
+      e.preventDefault()
+      cb(e)
     })
-    return this
   }
-  $.fn.fadeIn = function(opts) {
-    opts = $.extend({}, defaults, opts)
-    this.addClass(opts.fadeIn).show()
-    this.one('webkitAnimationEnd', () => {
-      this.removeClass(`${opts.fadeIn} ${opts.pOn}`).hide()
-      opts.cb && opts.cb()
+  $.fn.tapmove = function(cb) {
+    return this.on(_g.event.move, cb)
+  }
+  $.fn.tapend = function(cb) {
+    return this.on(_g.event.end, cb)
+  }
+  $.fn.tap = function(cb) {
+    var {start, end} = _g.event
+    var isMobile = start == 'touchstart'
+    this.on(start, e => {
+      var {pageX, pageY} = isMobile 
+        ? e.changedTouches[0]
+        : e
+      this._timeStart = Date.now()
+      this._posStart = [pageX, pageY]
+      e.preventDefault()
+    })
+    this.on(end, e => {
+      var {pageX, pageY} = isMobile 
+        ? e.changedTouches[0]
+        : e
+      var 
+        isMove = false, 
+        distLimit = 10,
+        distX = Math.abs(this._posStart[0] - pageX),
+        distY = Math.abs(this._posStart[1] - pageY)
+      if (distX > distLimit || distY > distLimit) 
+        isMove = true
+      if (!isMove && Date.now() - this._timeStart <= 300)
+        cb.call(this, e)
+      e.preventDefault()
     })
     return this
   }
@@ -56,17 +124,13 @@ _m.hint = function(t) {
   _m.hint.lastT = t
   var maskEl = $(`<div class='mask'><div class='hint'>${t}</div></div>`)
   maskEl.appendTo('body')
-  maskEl.moveIn({
-    cb() {
-      setTimeout(() => {
-        maskEl.fadeOut({
-          cb() {
-            maskEl.remove()
-          }
-        })
-        _m.hint.lastT = null
-      }, 2000)
-    }
+  maskEl.moveIn(() => {
+    setTimeout(() => {
+      maskEl.fadeOut(() => {
+        maskEl.remove()
+      })
+      _m.hint.lastT = null
+    }, 2000)
   })
 }
 
@@ -222,29 +286,6 @@ _g.page = {
   _g.ImgLoader = ImgLoader
 })()
 
-
-_m.init = function() {
-  init().then(res => {
-    console.warn('res: ', res)
-    if (res.status == 1) {
-      _m.initData = res
-      $('#page-load').fadeOut()
-      _m.hint('hello world')
-      _g.page.to('#page-hp', {
-        cb() {
-          $('.start').one('webkitTransitionEnd', ()=> {
-            console.log('start动画执行完成')
-
-            $('.start').addClass('start_ani')
-          })  
-        }
-      })
-    } else if (res.status == -5) {
-      _m.hint('活动已结束，感谢您的关注!')
-    }
-  })
-}
-
 _g.main = function() {
   console.log('加载完毕---------')
   console.log('进入页面---------')
@@ -254,7 +295,48 @@ _g.main = function() {
   // imgLoader2.load()
 
   _m.init()
-  $('.rule-btn').on('click', () => {
-    console.log('first')
+}
+
+_m.init = function() {
+  init().then(res => {
+    console.warn('res: ', res)
+    if (res.status == 1) {
+      _m.initData = res
+      // _m.hint('hello world')
+      // return
+      // $('#page-load').fadeOut()
+      $('#page-load').close()
+      // _g.page.open('#page-hp', {
+      //   cb: intoHp
+      // })
+      $('#page-hp').open(intoHp)
+    } else if (res.status == -5) {
+      _m.hint('活动已结束，感谢您的关注!')
+    } else {
+      _m.hint('数据异常')
+    }
+  })
+}
+
+function intoHp() {
+  var 
+    ruleBtn = $('.rule-btn'),
+    rule = $('#rule'),
+    closeBtn = $('.close-btn'),
+    start = $('.start')
+  
+  ruleBtn.tap(e => {
+    ruleBtn.bounce()
+    rule.moveIn()
+    closeBtn.tap(e => {
+      rule.moveOut()
+      closeBtn.off()
+    })
+  })
+  start.tap(e => {
+    start.moveOut()
+  })
+  start.one('webkitTransitionEnd', ()=> {
+    start.addClass('start_ani')
   })
 }

@@ -71,6 +71,13 @@ body {
   }
 }
 
+.popup {
+  position: absolute;
+  z-index: 2500;
+  inset: 0;
+  background-color: rgba(0,0,0,.7);
+}
+
 .dn {
   display: none;
 }
@@ -98,10 +105,10 @@ body {
 
 // animation
 .moveIn {
-  animation: moveIn .5s ease both;
+  animation: moveIn .5s ease both !important;
 }
 .moveOut {
-  animation: moveIn .5s ease reverse both;
+  animation: moveIn .5s ease reverse both !important;
 }
 @keyframes moveIn {
   from {
@@ -129,10 +136,10 @@ body {
 }
 
 .fadeIn {
-  animation: fadeIn .5s ease both;
+  animation: fadeIn .5s ease both !important;
 }
 .fadeOut {
-  animation: fadeIn .5s ease reverse both;
+  animation: fadeIn .5s ease reverse both !important;
 }
 @keyframes fadeIn {
   from {
@@ -140,5 +147,16 @@ body {
   }
   to {
     opacity: 1;
+  }
+}
+.bounce {
+  animation: bounce .3s ease both !important;
+}
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(.91);
   }
 }

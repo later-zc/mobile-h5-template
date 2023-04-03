@@ -2,7 +2,7 @@ var _g = _g || {}
 _g.event = 'ontouchstart' in window
   ? {start: 'touchstart', move: 'touchmove', end: 'touchend'}
   : {start: 'mousedown', move: 'mousemove', end: 'mouseup'}
-var _m = _m || {}
+// var _m = _m || {}
 
 ;(function($) {
   // var defaults = {
@@ -29,14 +29,14 @@ var _m = _m || {}
       return this
     }
   })
-  $.fn.open = function(cb) {
-    return this.fadeIn(() => {
+  $.fn.open = function(type, cb) {
+    return this[type ? 'moveIn' : 'fadeIn'](() => {
       this.addClass('page-on')
       cb&&cb()
     })
   }
-  $.fn.close = function(cb) {
-    return this.fadeOut(() => {
+  $.fn.close = function(type, cb) {
+    return this[type ? 'moveOut' : 'fadeOut'](() => {
       this.removeClass('page-on')
       cb&&cb()
     })
@@ -119,9 +119,9 @@ var _m = _m || {}
   }
 })(jQuery)
 
-_m.hint = function(t) {
-  if (_m.hint.lastT == t) return
-  _m.hint.lastT = t
+_g.hint = function(t) {
+  if (_g.hint.lastT == t) return
+  _g.hint.lastT = t
   var maskEl = $(`<div class='mask'><div class='hint'>${t}</div></div>`)
   maskEl.appendTo('body')
   maskEl.moveIn(() => {
@@ -129,7 +129,7 @@ _m.hint = function(t) {
       maskEl.fadeOut(() => {
         maskEl.remove()
       })
-      _m.hint.lastT = null
+      _g.hint.lastT = null
     }, 2000)
   })
 }
@@ -294,49 +294,116 @@ _g.main = function() {
   // imgLoader2.loadType = ['_src2']
   // imgLoader2.load()
 
-  _m.init()
+  _g.init()
 }
 
-_m.init = function() {
+_g.init = function() {
   init().then(res => {
     console.warn('res: ', res)
     if (res.status == 1) {
-      _m.initData = res
-      // _m.hint('hello world')
+      _g.initData = res
+      // _g.hint('hello world')
       // return
       // $('#page-load').fadeOut()
       $('#page-load').close()
       // _g.page.open('#page-hp', {
-      //   cb: intoHp
+      //   cb: openHp
       // })
-      $('#page-hp').open(intoHp)
+      // $('#page-hp').fadeIn()
+      // $('#page-hp').open(openHp)
+      openHp()
     } else if (res.status == -5) {
-      _m.hint('活动已结束，感谢您的关注!')
+      _g.hint('活动已结束，感谢您的关注!')
     } else {
-      _m.hint('数据异常')
+      _g.hint('数据异常')
     }
   })
 }
-
-function intoHp() {
+// 首页
+function openHp() {
   var 
-    ruleBtn = $('.rule-btn'),
-    rule = $('#rule'),
-    closeBtn = $('.close-btn'),
-    start = $('.start')
-  
-  ruleBtn.tap(e => {
-    ruleBtn.bounce()
-    rule.moveIn()
-    closeBtn.tap(e => {
-      rule.moveOut()
-      closeBtn.off()
-    })
-  })
+    pageId = '#page-hp'
+    page = $(pageId),
+    start = $(`${pageId} .start`),
+    ruleBtn = $(`${pageId} .rule-btn`),
+    redPackageBtn = $(`${pageId} .redPackage-btn`)
+  page.open()
   start.tap(e => {
     start.moveOut()
   })
   start.one('webkitTransitionEnd', ()=> {
     start.addClass('start_ani')
   })
+  ruleBtn.tap(e => {
+    ruleBtn.bounce()
+    openRule()
+  })
+  redPackageBtn.tap(e => {
+    redPackageBtn.bounce()
+    form().then(res => {
+      var {status, list} = res
+      switch(status) {
+        case 1:
+          if(list.length > 0) {
+            var prizeName = $('#page-redPackage .prizeName')
+            var tip = $('#page-redPackage .tip')
+            prizeName.text(list[0].name)
+            var {found, first} = _g.initData
+            if (found == 0 && first == 0) {
+              tip.text('分享至朋友圈/微信好友再玩一次')
+            } else if (found ==0 && first == 1) {
+              tip.text('您已经没有抽奖次数')
+            } else {
+              tip.text('游戏结束可进行抽奖')
+            }
+            openRedPackage()
+          } else {
+            _g.hint('您还没有虹包')
+          }
+          break
+        case -5: 
+          _g.hint('活动已结束, 感谢您的关注!')
+          break
+        default:
+          _g.hint('数据异常')
+          break
+      }
+    })
+  })
+  function off() {
+    page.close()
+    start.off()
+    ruleBtn.off()
+    redPackageBtn.off()
+  }
+}
+// 规则页
+function openRule() {
+  var 
+    pageId = '#page-rule'
+    page = $(pageId),
+    closeBtn = $(`${pageId} .close-btn`)
+  page.open(1)
+  closeBtn.tap(e => {
+    off()
+  })
+  function off() {
+    page.close(1)
+    closeBtn.off()
+  }
+}
+// 红包页
+function openRedPackage() {
+  var 
+    pageId = '#page-redPackage'
+    page = $(pageId),
+    closeBtn = $(`${pageId} .close-btn`)
+  page.open(1)
+  closeBtn.tap(e => {
+    off()
+  })
+  function off() {
+    page.close(1)
+    closeBtn.off()
+  }
 }

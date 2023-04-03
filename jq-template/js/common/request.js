@@ -10,17 +10,19 @@ function request(config = {}) {
     headers: config.headers || {}
   })
 }
-function get(url, data) {
+function get(config = {}) {
   return request({
-    url,
-    data
+    ...config,
+    url: config.url || '',
+    data: config.data || {}
   })
 }
-function post(url, data) {
+function post(config = {}) {
   return request({
-    url,
+    ...config,
+    url: config.url || '',
     method: 'POST',
-    data
+    data: config.data || {}
   })
 }
 
@@ -28,9 +30,15 @@ function post(url, data) {
 
 // 初始化
 function init() {
-  return request({
-    method: 'POST',
+  return post({
     url: 'Common/init.aspx',
     dataType: 'json',
+  })
+}
+
+function form() {
+  return post({
+    url: 'Common/form.aspx',
+    dataType: 'json'
   })
 }

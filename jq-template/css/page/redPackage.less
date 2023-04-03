@@ -1,0 +1,58 @@
+#page-redPackage {
+  .img {
+    position: absolute;
+    top: 331px;
+    left: 118px;
+  }
+  .prizeName {
+    position: absolute;
+    top: 446rem;
+    left: 210rem;
+    width: 360rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 34rem;
+    color: #eb3213;
+  }
+  .btn {
+    position: absolute;
+    top: 966rem;
+    width: 150rem;
+    height: 51rem;
+    opacity: 0;
+    transition: all 1s ease;
+  }
+  .share-btn {
+    .btn();
+    left: 240rem;
+    transform: translateX(-50rem);
+  }
+  .receive-btn {
+    .btn();
+    right: 195rem;
+    transform: translateX(50rem);
+  }
+  .tip {
+    position: absolute;
+    top: 916rem;
+    left: 156rem;
+    width: 460rem;
+    color: #fff;
+    font-size: 20rem;
+    text-align: center;
+  }
+  .close-btn {
+    position: absolute;
+    top: 1035rem;
+    left: 348rem;
+    width: 82rem;
+    height: 121rem;
+  }
+  &.page-on {
+    .share-btn, 
+    .receive-btn {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

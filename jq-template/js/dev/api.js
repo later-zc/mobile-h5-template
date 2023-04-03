@@ -27,7 +27,7 @@ $.mockjax({
 $.mockjax({
   url: 'Common/form.aspx',
   responseText: {
-    status: 1,
+    status: -5,
     list: [{ name: '百货1000减60优惠券' }],
   },
 })

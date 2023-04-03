@@ -363,6 +363,7 @@ function openHp() {
           break
         case -5: 
           _g.hint('活动已结束, 感谢您的关注!')
+          $('#page-share').open()
           break
         default:
           _g.hint('数据异常')

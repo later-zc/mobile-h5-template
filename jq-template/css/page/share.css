@@ -1,0 +1,1 @@
+#page-share .img{position:absolute;width:549rem;height:512rem;top:40rem;right:40rem;animation:backOut .5s var(--easeOutBack) .5s both !important}@keyframes backOut{0%{transform:scale(0)}100%{transform:scale(1)}}
